@@ -51,19 +51,6 @@ function whichButtonPressed () {
         return -1
     }
 }
-input.onButtonPressed(Button.A, function () {
-    basic.showNumber(input.temperature())
-})
-input.onButtonPressed(Button.AB, function () {
-    basic.showNumber(sonar.ping(
-    DigitalPin.P13,
-    DigitalPin.P12,
-    PingUnit.Centimeters
-    ))
-})
-input.onButtonPressed(Button.B, function () {
-    basic.showNumber(input.compassHeading())
-})
 let button_pressed = 0
 let pin = 0
 basic.showLeds(`
