@@ -23,7 +23,7 @@ function showLightSound (num: number) {
 function isPinPressed (num: number) {
     pin = getPin(num)
     if (pin == 0) {
-        while (pins.digitalReadPin(DigitalPin.P0) != 1) {
+        while (getPin(num) != 1) {
         	
         }
         return 1
@@ -64,6 +64,7 @@ input.onButtonPressed(Button.AB, function () {
 input.onButtonPressed(Button.B, function () {
     basic.showNumber(input.compassHeading())
 })
+let button_pressed = 0
 let pin = 0
 basic.showLeds(`
     # . . . #
@@ -76,7 +77,21 @@ led.enable(false)
 let correct_sequence = [randint(0, 3)]
 pins.setPull(DigitalPin.P0, PinPullMode.PullUp)
 basic.forever(function () {
-    serial.writeNumber(whichButtonPressed())
+    let press_sequence: number[] = []
+    serial.writeNumbers(correct_sequence)
     serial.writeLine("")
-    basic.pause(100)
+    for (let value of correct_sequence) {
+        showLightSound(value)
+    }
+    while (correct_sequence.length != press_sequence.length) {
+        button_pressed = whichButtonPressed()
+        basic.pause(100)
+        if (button_pressed != -1) {
+            press_sequence.push(button_pressed)
+            serial.writeString("Button:")
+            serial.writeNumber(button_pressed)
+            serial.writeLine("")
+        }
+    }
+    correct_sequence.push(randint(0, 3))
 })
