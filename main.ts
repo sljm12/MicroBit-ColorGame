@@ -8,16 +8,24 @@ function pressed () {
 function showLightSound (num: number) {
     if (num == 0) {
         music.playTone(349, music.beat(BeatFraction.Whole))
+        pins.digitalWritePin(DigitalPin.P12, 1)
         music.rest(music.beat(BeatFraction.Whole))
+        pins.digitalWritePin(DigitalPin.P12, 0)
     } else if (num == 1) {
         music.playTone(392, music.beat(BeatFraction.Whole))
+        pins.digitalWritePin(DigitalPin.P13, 1)
         music.rest(music.beat(BeatFraction.Whole))
+        pins.digitalWritePin(DigitalPin.P13, 0)
     } else if (num == 2) {
         music.playTone(440, music.beat(BeatFraction.Whole))
+        pins.digitalWritePin(DigitalPin.P14, 1)
         music.rest(music.beat(BeatFraction.Whole))
+        pins.digitalWritePin(DigitalPin.P14, 0)
     } else {
         music.playTone(494, music.beat(BeatFraction.Whole))
+        pins.digitalWritePin(DigitalPin.P15, 1)
         music.rest(music.beat(BeatFraction.Whole))
+        pins.digitalWritePin(DigitalPin.P15, 0)
     }
 }
 function isPinPressed (num: number) {
