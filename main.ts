@@ -47,7 +47,7 @@ function getPin (num: number) {
     } else if (num == 2) {
         return pins.digitalReadPin(DigitalPin.P2)
     } else if (num == 3) {
-        return pins.digitalReadPin(DigitalPin.P3)
+        return pins.digitalReadPin(DigitalPin.P8)
     } else {
         return -1
     }
@@ -91,12 +91,12 @@ basic.showLeds(`
     . . . . .
     . . . . .
     `)
-led.enable(false)
+led.enable(true)
 let correct_sequence = [randint(0, 3)]
 pins.setPull(DigitalPin.P0, PinPullMode.PullUp)
 pins.setPull(DigitalPin.P1, PinPullMode.PullUp)
 pins.setPull(DigitalPin.P2, PinPullMode.PullUp)
-pins.setPull(DigitalPin.P3, PinPullMode.PullUp)
+pins.setPull(DigitalPin.P8, PinPullMode.PullUp)
 let index = 0
 basic.forever(function () {
     let press_sequence: number[] = []
@@ -120,6 +120,7 @@ basic.forever(function () {
             if (button_pressed != correct_sequence[index]) {
                 serial.writeLine("User press wrong button")
                 PressedError()
+                basic.showNumber(correct_sequence.length)
                 index = 0
                 correct_sequence = []
                 showRestartLEDs()
