@@ -65,6 +65,20 @@ function whichButtonPressed () {
         return -1
     }
 }
+function showRestartLEDs () {
+    for (let index2 = 0; index2 < 3; index2++) {
+        pins.digitalWritePin(DigitalPin.P12, 1)
+        pins.digitalWritePin(DigitalPin.P13, 1)
+        pins.digitalWritePin(DigitalPin.P14, 1)
+        pins.digitalWritePin(DigitalPin.P15, 1)
+        basic.pause(500)
+        pins.digitalWritePin(DigitalPin.P12, 0)
+        pins.digitalWritePin(DigitalPin.P13, 0)
+        pins.digitalWritePin(DigitalPin.P14, 0)
+        pins.digitalWritePin(DigitalPin.P15, 0)
+        basic.pause(500)
+    }
+}
 function PressedError () {
     soundExpression.giggle.play()
 }
@@ -108,6 +122,7 @@ basic.forever(function () {
                 PressedError()
                 index = 0
                 correct_sequence = []
+                showRestartLEDs()
                 break;
             }
             press_sequence.push(button_pressed)
