@@ -47,7 +47,7 @@ function getPin (num: number) {
     } else if (num == 2) {
         return pins.digitalReadPin(DigitalPin.P2)
     } else if (num == 3) {
-        return pins.digitalReadPin(DigitalPin.P2)
+        return pins.digitalReadPin(DigitalPin.P3)
     } else {
         return -1
     }
@@ -55,9 +55,18 @@ function getPin (num: number) {
 function whichButtonPressed () {
     if (isPinPressed(0) == 1) {
         return 0
+    } else if (isPinPressed(1) == 1) {
+        return 1
+    } else if (isPinPressed(2) == 1) {
+        return 2
+    } else if (isPinPressed(3) == 1) {
+        return 3
     } else {
         return -1
     }
+}
+function PressedError () {
+    soundExpression.giggle.play()
 }
 let button_pressed = 0
 let pin = 0
@@ -71,8 +80,13 @@ basic.showLeds(`
 led.enable(false)
 let correct_sequence = [randint(0, 3)]
 pins.setPull(DigitalPin.P0, PinPullMode.PullUp)
+pins.setPull(DigitalPin.P1, PinPullMode.PullUp)
+pins.setPull(DigitalPin.P2, PinPullMode.PullUp)
+pins.setPull(DigitalPin.P3, PinPullMode.PullUp)
+let index = 0
 basic.forever(function () {
     let press_sequence: number[] = []
+    music.setBuiltInSpeakerEnabled(true)
     serial.writeNumbers(correct_sequence)
     serial.writeLine("")
     for (let value of correct_sequence) {
@@ -82,11 +96,27 @@ basic.forever(function () {
         button_pressed = whichButtonPressed()
         basic.pause(100)
         if (button_pressed != -1) {
+            serial.writeString("index:")
+            serial.writeNumber(index)
+            serial.writeString(" Button Pressed:")
+            serial.writeNumber(button_pressed)
+            serial.writeString("Correct Sequece :")
+            serial.writeNumber(correct_sequence[index])
+            serial.writeLine("")
+            if (button_pressed != correct_sequence[index]) {
+                serial.writeLine("User press wrong button")
+                PressedError()
+                index = 0
+                correct_sequence = []
+                break;
+            }
             press_sequence.push(button_pressed)
             serial.writeString("Button:")
             serial.writeNumber(button_pressed)
             serial.writeLine("")
+            index = index + 1
         }
     }
     correct_sequence.push(randint(0, 3))
+    index = 0
 })
